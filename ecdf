@@ -1,0 +1,36 @@
+#code for ecdf
+def ecdf(data):
+    # Generate ECDF (Empirical Cumulative Distribution Function)
+    # for on dimension arrays
+    n = len(data)
+
+    # X axis data
+    x = np.sort(data)
+
+     # Y axis data
+    y = np.arange(1, n+1) / n
+
+    return x, y
+
+# Generate ECDF data
+x_rounds, y_rounds = ecdf(df['sum_gamerounds'])
+
+# Generate percentile makers 
+percentiles = np.array([5,25,50,75,95])
+ptiles = np.percentile(df['sum_gamerounds'], percentiles)
+
+# ECDF plot
+ecdf = go.Figure()
+
+# Add traces
+ecdf.add_trace(go.Scatter(x=x_rounds, y=y_rounds,
+                    mode='markers',
+                    name='Game Rounds'))
+ecdf.add_trace(go.Scatter(x=ptiles, y=percentiles/100,
+                    mode='markers+text',
+                    name='Percentiles', marker_line_width=2, marker_size=10,
+                    text=percentiles, textposition="bottom right"))
+#ecdf.update_layout(layout)
+ecdf.update_layout(title='Game Rounds Cumulative Distribution Plot', yaxis_title="Cumulative Probability")
+#ecdf.add_annotation(sign)
+ecdf.show()
